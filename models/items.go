@@ -36,3 +36,13 @@ func CreateItem(item *Item) error {
 
 	return nil
 }
+
+// Delete an item by id
+func DeleteItem(itemId string) error {
+	_, err := db.Exec("DELETE FROM items WHERE id = ?", itemId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

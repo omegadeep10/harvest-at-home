@@ -5,6 +5,7 @@ import (
 	"harvest-at-home/models"
 	"net/http"
 
+	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 )
 
@@ -48,5 +49,24 @@ func CreateItem(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, &models.SuccessResponse{
 		HTTPStatusCode: 200,
 		StatusText:     "Successfully created item",
+	})
+}
+
+func DeleteItem(w http.ResponseWriter, r *http.Request) {
+	item_id := chi.URLParam(r, "id")
+	err := models.DeleteItem(item_id)
+
+	if err != nil {
+		render.Status(r, http.StatusNotFound)
+		render.JSON(w, r, &models.ErrResponse{
+			HTTPStatusCode: 404,
+			ErrorText:      err.Error(),
+		})
+		return
+	}
+
+	render.JSON(w, r, &models.SuccessResponse{
+		HTTPStatusCode: 200,
+		StatusText:     "Successfully deleted item " + item_id,
 	})
 }

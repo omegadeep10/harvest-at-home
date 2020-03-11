@@ -28,5 +28,7 @@ func main() {
 
 	r.Get("/items", controllers.GetItems)
 	r.Post("/items", controllers.CreateItem)
+	r.Delete("/items/{id}", controllers.DeleteItem)
+
 	log.Fatal(http.ListenAndServe(":8081", r))
 }
