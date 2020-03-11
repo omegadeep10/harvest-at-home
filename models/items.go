@@ -46,3 +46,14 @@ func DeleteItem(itemId string) error {
 
 	return nil
 }
+
+// Update an item
+func UpdateItem(item *Item) error {
+	_, err := db.Exec("UPDATE items SET title = ?, description = ?, price_per_unit = ?, unit_size = ?, image = ? WHERE id = ?", item.Title, item.Description, item.PricePerUnit, item.UnitSize, item.Image, item.Id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
