@@ -21,3 +21,7 @@ func InitDB(dataSourceName string) {
 		log.Panic(err)
 	}
 }
+
+func CloseDB() {
+	db.Close()
+}
