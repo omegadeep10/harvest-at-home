@@ -14,6 +14,9 @@ import (
 
 func main() {
 	r := chi.NewRouter()
+	// jwtAuth := GetAuthMiddleware()
+
+	// initialize database
 	models.InitDB("./main.db")
 	defer models.CloseDB()
 
@@ -26,10 +29,13 @@ func main() {
 		middleware.Recoverer,
 	)
 
-	r.Get("/items", controllers.GetItems)
-	r.Post("/items", controllers.CreateItem)
-	r.Delete("/items/{id}", controllers.DeleteItem)
-	r.Put("/items/{id}", controllers.UpdateItem)
+	// change this to jwtAuth.Handler before going live (disabling auth during dev)
+	r.With(EmptyAuthMiddleware).Route("/", func(r chi.Router) {
+		r.Get("/items", controllers.GetItems)
+		r.Post("/items", controllers.CreateItem)
+		r.Delete("/items/{id}", controllers.DeleteItem)
+		r.Put("/items/{id}", controllers.UpdateItem)
+	})
 
 	log.Fatal(http.ListenAndServe(":8081", r))
 }
