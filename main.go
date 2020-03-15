@@ -9,12 +9,22 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
 )
 
 func main() {
 	r := chi.NewRouter()
 	// jwtAuth := GetAuthMiddleware()
+
+	cors := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	})
 
 	// initialize database
 	models.InitDB("./main.db")
@@ -27,6 +37,7 @@ func main() {
 		middleware.Logger,
 		middleware.RedirectSlashes,
 		middleware.Recoverer,
+		cors.Handler,
 	)
 
 	// change this to jwtAuth.Handler before going live (disabling auth during dev)
