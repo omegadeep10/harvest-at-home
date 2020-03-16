@@ -17,4 +17,6 @@ type Item struct {
 	PricePerUnit float64 `json:"price_per_unit"`
 	UnitSize     string  `json:"unit_size"`
 	Image        string  `json:"image"`
+	FarmName     string  `json:"farm_name"`
+	ProfilePic   string  `json:"profile_pic"`
 }

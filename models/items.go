@@ -11,7 +11,7 @@ func GetAllItems() ([]*Item, error) {
 	items := make([]*Item, 0)
 	for rows.Next() {
 		item := new(Item)
-		err := rows.Scan(&item.Id, &item.Title, &item.Description, &item.PricePerUnit, &item.UnitSize, &item.Image)
+		err := rows.Scan(&item.Id, &item.Title, &item.Description, &item.PricePerUnit, &item.UnitSize, &item.Image, &item.FarmName, &item.ProfilePic)
 
 		if err != nil {
 			return nil, err
@@ -29,7 +29,7 @@ func GetAllItems() ([]*Item, error) {
 
 // Create a new item
 func CreateItem(item *Item) error {
-	_, err := db.Exec("INSERT INTO items(title, description, price_per_unit, unit_size, image) VALUES(?, ?, ?, ?, ?)", item.Title, item.Description, item.PricePerUnit, item.UnitSize, item.Image)
+	_, err := db.Exec("INSERT INTO items(title, description, price_per_unit, unit_size, image, farm_name, profile_pic) VALUES(?, ?, ?, ?, ?, ?, ?)", item.Title, item.Description, item.PricePerUnit, item.UnitSize, item.Image, item.FarmName, item.ProfilePic)
 	if err != nil {
 		return err
 	}
@@ -49,7 +49,7 @@ func DeleteItem(itemId string) error {
 
 // Update an item
 func UpdateItem(item *Item) error {
-	_, err := db.Exec("UPDATE items SET title = ?, description = ?, price_per_unit = ?, unit_size = ?, image = ? WHERE id = ?", item.Title, item.Description, item.PricePerUnit, item.UnitSize, item.Image, item.Id)
+	_, err := db.Exec("UPDATE items SET title = ?, description = ?, price_per_unit = ?, unit_size = ?, image = ?, farm_name = ?, profile_pic = ? WHERE id = ?", item.Title, item.Description, item.PricePerUnit, item.UnitSize, item.Image, item.Id, item.FarmName, item.ProfilePic)
 
 	if err != nil {
 		return err

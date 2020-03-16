@@ -59,13 +59,13 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8081", r))
 }
 
-// FileServer is serving static files
+// FileServer serves all files within the static folder at the given public root
 func FileServer(r chi.Router, public string, static string) {
-
 	if strings.ContainsAny(public, "{}*") {
 		panic("FileServer does not permit URL parameters.")
 	}
 
+	// get absolute path to the specified static directory, returning an error if not found
 	root, _ := filepath.Abs(static)
 	if _, err := os.Stat(root); os.IsNotExist(err) {
 		panic("Static Documents Directory Not Found")
