@@ -19,7 +19,12 @@ import (
 
 func main() {
 	r := chi.NewRouter()
-	// jwtAuth := GetAuthMiddleware()
+	jwtAuth := GetAuthMiddleware()
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8081"
+	}
 
 	cors := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
@@ -45,7 +50,7 @@ func main() {
 	)
 
 	// change this to jwtAuth.Handler before going live (disabling auth during dev)
-	r.With(EmptyAuthMiddleware).Route("/", func(r chi.Router) {
+	r.With(jwtAuth.Handler).Route("/", func(r chi.Router) {
 		r.Get("/items", controllers.GetItems)
 		r.Post("/items", controllers.CreateItem)
 		r.Delete("/items/{id}", controllers.DeleteItem)
@@ -56,7 +61,7 @@ func main() {
 		FileServer(r, "/static", "static/")
 	})
 
-	log.Fatal(http.ListenAndServe(":8081", r))
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }
 
 // FileServer serves all files within the static folder at the given public root
